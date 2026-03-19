@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { FlowerBurst, FloatingEmojis } from "@/components/ui/flower-burst";
@@ -488,7 +489,7 @@ export default function Home() {
               {/* FIREWORKS BACKGROUND */}
               <FireworksDisplay />
 
-              <div className="absolute inset-0 pointer-events-none z-[1]">
+              <div className="absolute inset-0 pointer-events-none z-1">
                 <SparklesCore particleDensity={70} particleColor={level.sparkleColor} speed={0.8} background="transparent" />
               </div>
 
@@ -654,13 +655,33 @@ export default function Home() {
                   <p className="mt-4 text-pink-300 font-semibold text-2xl">You&apos;re the best, my baby girl 😘😘😘</p>
                 </motion.div>
 
-                {/* Photo placeholder */}
+                {/* Our photo */}
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1 }}
-                  className="mt-8 rounded-3xl border-2 border-dashed border-pink-400/40 p-10 text-pink-300/50 text-sm flex flex-col items-center gap-2"
+                  initial={{ opacity: 0, scale: 0.85, y: 30 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
+                  className="mt-8 relative group"
                 >
-                  <span className="text-4xl">📸</span>
-                  <span>Add your favourite photo of Kashish here</span>
+                  {/* Glow ring */}
+                  <motion.div
+                    animate={{ opacity: [0.4, 0.8, 0.4], scale: [1, 1.03, 1] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute -inset-1 rounded-3xl bg-linear-to-r from-pink-500 via-purple-500 to-rose-500 blur-lg"
+                  />
+                  <div className="relative rounded-3xl overflow-hidden border-2 border-pink-400/30 shadow-2xl shadow-pink-500/20">
+                    <Image
+                      src="/couple.jpg"
+                      alt="Us 💖"
+                      width={380}
+                      height={500}
+                      className="object-cover w-full max-w-xs mx-auto"
+                      priority
+                    />
+                    {/* Overlay label */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent px-4 py-4">
+                      <p className="text-white/80 text-sm font-medium">Us 💖</p>
+                    </div>
+                  </div>
                 </motion.div>
 
                 {/* Big heart pulse */}
