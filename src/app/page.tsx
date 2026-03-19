@@ -6,8 +6,9 @@ import { SparklesCore } from "@/components/ui/sparkles";
 import { FlowerBurst, FloatingEmojis } from "@/components/ui/flower-burst";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import { LoveRevealCard } from "@/components/ui/love-reveal-card";
+import { FireworksDisplay, GalaxyAnimation, HindiTextReveal } from "@/components/ui/fireworks-galaxy";
 
-// ─── Game Level Definitions ──────────────────────────────────────────────────
+// ─── Game Level Definitions (8 levels) ──────────────────────────────────────
 
 const LEVELS = [
   {
@@ -75,14 +76,43 @@ const LEVELS = [
     cards: false,
     final: false,
   },
+  // ─── NEW LEVEL 5: Hindi / Fireworks ───
   {
     id: 5,
+    name: "Tu Meri Jaan Hai",
+    emoji: "🎆",
+    bg: "from-violet-950 via-black to-fuchsia-950",
+    sparkleColor: "#e879f9",
+    headline: "Ab sunle Hindi mein… 🇮🇳",
+    body: "",
+    cta: "Chal aage badh 🚀",
+    secretMessage: "Tera gussa bhi handle kar lunga, bas tu rehna mere saath 🥺😂",
+    cards: false,
+    final: false,
+  },
+  // ─── NEW LEVEL 6: Galaxy / Our Universe ───
+  {
+    id: 6,
+    name: "Our Universe",
+    emoji: "🪐",
+    bg: "from-black via-indigo-950 to-black",
+    sparkleColor: "#818cf8",
+    headline: "You're my entire universe.",
+    body: "If the whole galaxy was mine, I'd still only look at you. Every star, every planet, every constellation reminds me that the universe made something perfect when it made you.",
+    cta: "Take me to the finale ✨",
+    secretMessage: null as string | null,
+    cards: false,
+    final: false,
+  },
+  // ─── FINAL LEVEL (now 7) ───
+  {
+    id: 7,
     name: "You're My Everything",
     emoji: "🌌",
     bg: "from-black via-rose-950 to-black",
     sparkleColor: "#ff6eb0",
     headline: "You're my everything.",
-    body: "From the bottom of my heart — I love you more than any words or website could ever show. But I made this just for you, because you deserve all the flowers in the world. 🌸",
+    body: "From the bottom of my heart, I love you more than any words or website could ever show. But I made this just for you, because you deserve all the flowers in the world. 🌸\n\nYou're the best, my baby girl 😘😘😘",
     cta: null as string | null,
     secretMessage: null as string | null,
     cards: false,
@@ -144,7 +174,7 @@ function seededRand(seed: number) {
   return x - Math.floor(x);
 }
 
-// ─── Progress Bar ─────────────────────────────────────────────────────────────
+// ─── UI Helpers ───────────────────────────────────────────────────────────────
 
 const ProgressBar = ({ current, total }: { current: number; total: number }) => (
   <div className="fixed top-0 left-0 right-0 z-50 h-1.5 bg-white/10">
@@ -170,7 +200,6 @@ const LevelBadge = ({ level, name }: { level: number; name: string }) => (
   </motion.div>
 );
 
-// Pre-built confetti (no Math.random in render)
 const CONFETTI_DATA = Array.from({ length: 30 }, (_, i) => ({
   id: i,
   x: seededRand(i) * 100,
@@ -209,16 +238,12 @@ const SecretPopup = ({ message, onClose }: { message: string; onClose: () => voi
   >
     <p className="text-2xl mb-2">🤫</p>
     <p className="text-pink-200 text-sm leading-relaxed">{message}</p>
-    <button
-      onClick={onClose}
-      className="mt-3 text-xs text-pink-400/60 hover:text-pink-300 transition-colors"
-    >
+    <button onClick={onClose} className="mt-3 text-xs text-pink-400/60 hover:text-pink-300 transition-colors">
       close ×
     </button>
   </motion.div>
 );
 
-// ─── Thank-you list items ─────────────────────────────────────────────────────
 const THANK_YOU_ITEMS = [
   "For every time you believed in me 🙏",
   "For every hug when I needed it most 🤗",
@@ -264,7 +289,6 @@ export default function Home() {
     setRevealedCards((prev) => new Set([...prev, idx]));
   }, []);
 
-  // Easter egg: type "kashish" anywhere
   useEffect(() => {
     const buffer: string[] = [];
     const TARGET = "kashish";
@@ -296,7 +320,6 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Flash on CTA click */}
       <AnimatePresence>
         {ctaClicked && (
           <motion.div
@@ -316,7 +339,8 @@ export default function Home() {
           exit={{ opacity: 0, y: -60 }}
           transition={{ duration: 0.55, ease: "easeInOut" }}
         >
-          {/* ────────── LEVEL 0 ────────── */}
+
+          {/* ────────── LEVEL 0: The Beginning ────────── */}
           {currentLevel === 0 && (
             <BackgroundBeamsWithCollision className={`min-h-screen ${gradientBg}`}>
               <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-6 text-center gap-8 pt-16">
@@ -346,7 +370,7 @@ export default function Home() {
             </BackgroundBeamsWithCollision>
           )}
 
-          {/* ────────── LEVEL 1 ────────── */}
+          {/* ────────── LEVEL 1: Apology ────────── */}
           {currentLevel === 1 && (
             <div className={`min-h-screen ${gradientBg} flex flex-col items-center justify-center px-6 pt-20 pb-16 text-center gap-10 relative`}>
               <div className="absolute inset-0 pointer-events-none">
@@ -363,50 +387,31 @@ export default function Home() {
                   <TextGenerateEffect words={level.body} className="text-lg md:text-xl text-white/80 leading-relaxed font-normal" filter duration={0.4} />
                 </motion.div>
               </div>
-              <motion.div animate={{ rotate: [0, -3, 3, -3, 3, 0] }} transition={{ duration: 0.5, delay: 1.5, repeat: 3, repeatDelay: 2 }} className="text-5xl">
-                🌹
-              </motion.div>
+              <motion.div animate={{ rotate: [0, -3, 3, -3, 3, 0] }} transition={{ duration: 0.5, delay: 1.5, repeat: 3, repeatDelay: 2 }} className="text-5xl">🌹</motion.div>
               <FlowerBurst mode="flowers" burstCount={20}>
-                <motion.button
-                  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2, type: "spring" }}
-                  whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }}
-                  onClick={handleCta}
-                  className="px-10 py-4 rounded-full bg-linear-to-r from-rose-500 to-pink-600 text-white font-bold text-lg shadow-2xl shadow-rose-500/30"
-                >
+                <motion.button initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2, type: "spring" }} whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }} onClick={handleCta} className="px-10 py-4 rounded-full bg-linear-to-r from-rose-500 to-pink-600 text-white font-bold text-lg shadow-2xl shadow-rose-500/30">
                   {level.cta}
                 </motion.button>
               </FlowerBurst>
             </div>
           )}
 
-          {/* ────────── LEVEL 2 ────────── */}
+          {/* ────────── LEVEL 2: Love Cards ────────── */}
           {currentLevel === 2 && (
             <div className={`min-h-screen ${gradientBg} flex flex-col items-center px-4 pt-20 pb-16 gap-10 relative`}>
               <div className="absolute inset-0 pointer-events-none">
                 <SparklesCore particleDensity={50} particleColor={level.sparkleColor} speed={0.6} background="transparent" />
               </div>
               <div className="relative z-10 text-center max-w-xl mt-4">
-                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200 }} className="text-6xl mb-4">
-                  {level.emoji}
-                </motion.div>
-                <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-3xl md:text-5xl font-bold text-white mb-3">
-                  {level.headline}
-                </motion.h2>
-                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="text-white/60 text-lg">
-                  {level.body}
-                </motion.p>
-                {/* Dot progress */}
+                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200 }} className="text-6xl mb-4">{level.emoji}</motion.div>
+                <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-3xl md:text-5xl font-bold text-white mb-3">{level.headline}</motion.h2>
+                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="text-white/60 text-lg">{level.body}</motion.p>
                 <div className="mt-4 flex items-center justify-center gap-2">
                   {LOVE_CARDS.map((_, i) => (
-                    <motion.div
-                      key={i}
-                      animate={{ scale: revealedCards.has(i) ? 1.3 : 1, backgroundColor: revealedCards.has(i) ? "#ec4899" : "rgba(255,255,255,0.15)" }}
-                      className="h-2 w-2 rounded-full"
-                    />
+                    <motion.div key={i} animate={{ scale: revealedCards.has(i) ? 1.3 : 1, backgroundColor: revealedCards.has(i) ? "#ec4899" : "rgba(255,255,255,0.15)" }} className="h-2 w-2 rounded-full" />
                   ))}
                 </div>
               </div>
-              {/* Cards */}
               <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-4xl px-2">
                 {LOVE_CARDS.map((card, idx) => (
                   <motion.div key={idx} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + idx * 0.1 }}>
@@ -418,11 +423,7 @@ export default function Home() {
                 {allCardsRevealed && (
                   <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="relative z-10">
                     <FlowerBurst mode="flowers" burstCount={22}>
-                      <motion.button
-                        whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }}
-                        onClick={handleCta}
-                        className="px-10 py-4 rounded-full bg-linear-to-r from-pink-500 to-purple-600 text-white font-bold text-lg shadow-2xl shadow-purple-500/30"
-                      >
+                      <motion.button whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }} onClick={handleCta} className="px-10 py-4 rounded-full bg-linear-to-r from-pink-500 to-purple-600 text-white font-bold text-lg shadow-2xl shadow-purple-500/30">
                         {level.cta}
                       </motion.button>
                     </FlowerBurst>
@@ -437,63 +438,43 @@ export default function Home() {
             </div>
           )}
 
-          {/* ────────── LEVEL 3 ────────── */}
+          {/* ────────── LEVEL 3: Thank You ────────── */}
           {currentLevel === 3 && (
             <div className={`min-h-screen ${gradientBg} flex flex-col items-center justify-center px-6 pt-20 pb-16 text-center gap-10 relative`}>
               <div className="absolute inset-0 pointer-events-none">
                 <SparklesCore particleDensity={60} particleColor={level.sparkleColor} speed={0.7} background="transparent" />
               </div>
-              <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: "spring", stiffness: 180, delay: 0.2 }} className="text-7xl">
-                {level.emoji}
-              </motion.div>
+              <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: "spring", stiffness: 180, delay: 0.2 }} className="text-7xl">{level.emoji}</motion.div>
               <div className="relative z-10 max-w-2xl">
-                <motion.h2 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="text-4xl md:text-6xl font-bold text-white mb-8">
-                  {level.headline}
-                </motion.h2>
+                <motion.h2 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="text-4xl md:text-6xl font-bold text-white mb-8">{level.headline}</motion.h2>
                 {THANK_YOU_ITEMS.map((item, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 + i * 0.18 }} className="text-white/80 text-lg py-2.5 border-b border-white/10 last:border-0 text-left">
-                    {item}
-                  </motion.div>
+                  <motion.div key={i} initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 + i * 0.18 }} className="text-white/80 text-lg py-2.5 border-b border-white/10 last:border-0 text-left">{item}</motion.div>
                 ))}
               </div>
               <FlowerBurst mode="mixed" burstCount={18}>
-                <motion.button
-                  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.8, type: "spring" }}
-                  whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }}
-                  onClick={handleCta}
-                  className="px-10 py-4 rounded-full bg-linear-to-r from-violet-600 to-indigo-600 text-white font-bold text-lg shadow-2xl shadow-violet-500/30"
-                >
+                <motion.button initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.8, type: "spring" }} whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }} onClick={handleCta} className="px-10 py-4 rounded-full bg-linear-to-r from-violet-600 to-indigo-600 text-white font-bold text-lg shadow-2xl shadow-violet-500/30">
                   {level.cta}
                 </motion.button>
               </FlowerBurst>
             </div>
           )}
 
-          {/* ────────── LEVEL 4 ────────── */}
+          {/* ────────── LEVEL 4: My Promise ────────── */}
           {currentLevel === 4 && (
             <BackgroundBeamsWithCollision className={`min-h-screen ${gradientBg}`}>
               <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-6 pt-20 pb-16 text-center gap-10">
                 <div className="absolute inset-0 pointer-events-none">
                   <SparklesCore particleDensity={50} particleColor={level.sparkleColor} speed={0.6} background="transparent" />
                 </div>
-                <motion.div initial={{ scale: 0 }} animate={{ scale: [0, 1.2, 1] }} transition={{ duration: 0.8, delay: 0.3 }} className="text-7xl">
-                  {level.emoji}
-                </motion.div>
+                <motion.div initial={{ scale: 0 }} animate={{ scale: [0, 1.2, 1] }} transition={{ duration: 0.8, delay: 0.3 }} className="text-7xl">{level.emoji}</motion.div>
                 <div className="relative z-10 max-w-2xl">
-                  <motion.h2 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="text-4xl md:text-6xl font-bold text-white mb-6">
-                    {level.headline}
-                  </motion.h2>
+                  <motion.h2 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="text-4xl md:text-6xl font-bold text-white mb-6">{level.headline}</motion.h2>
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }}>
                     <TextGenerateEffect words={level.body} className="text-lg md:text-xl text-white/80 leading-relaxed font-normal" filter duration={0.4} />
                   </motion.div>
                 </div>
                 <FlowerBurst mode="hearts" burstCount={24}>
-                  <motion.button
-                    initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.4, type: "spring" }}
-                    whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }}
-                    onClick={handleCta}
-                    className="px-10 py-4 rounded-full bg-linear-to-r from-amber-500 to-rose-500 text-white font-bold text-lg shadow-2xl shadow-amber-500/30"
-                  >
+                  <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.4, type: "spring" }} whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }} onClick={handleCta} className="px-10 py-4 rounded-full bg-linear-to-r from-amber-500 to-rose-500 text-white font-bold text-lg shadow-2xl shadow-amber-500/30">
                     {level.cta}
                   </motion.button>
                 </FlowerBurst>
@@ -501,8 +482,155 @@ export default function Home() {
             </BackgroundBeamsWithCollision>
           )}
 
-          {/* ────────── LEVEL 5: FINAL ────────── */}
+          {/* ────────── LEVEL 5: Hindi + Fireworks 🎆 ────────── */}
           {currentLevel === 5 && (
+            <div className={`min-h-screen ${gradientBg} flex flex-col items-center justify-center px-6 pt-20 pb-16 text-center gap-8 relative overflow-hidden`}>
+              {/* FIREWORKS BACKGROUND */}
+              <FireworksDisplay />
+
+              <div className="absolute inset-0 pointer-events-none z-[1]">
+                <SparklesCore particleDensity={70} particleColor={level.sparkleColor} speed={0.8} background="transparent" />
+              </div>
+
+              {/* Main emoji */}
+              <motion.div
+                initial={{ scale: 0, rotate: -30 }}
+                animate={{ scale: [0, 1.4, 1], rotate: [0, 15, 0] }}
+                transition={{ duration: 1, delay: 0.2, type: "spring" }}
+                className="text-8xl relative z-10"
+              >
+                {level.emoji}
+              </motion.div>
+
+              {/* Hindi headline with glow */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5, type: "spring" }}
+                className="relative z-10"
+              >
+                <h2 className="text-4xl md:text-6xl font-bold text-white mb-2 [text-shadow:0_0_30px_rgba(232,121,249,0.5)]">
+                  {level.headline}
+                </h2>
+                {/* Pulsing Namaste emoji */}
+                <motion.div
+                  animate={{ scale: [1, 1.3, 1], rotate: [0, 10, -10, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+                  className="text-5xl mt-2"
+                >
+                  🙏
+                </motion.div>
+              </motion.div>
+
+              {/* Hindi text reveal lines */}
+              <div className="relative z-10">
+                <HindiTextReveal />
+              </div>
+
+              {/* Desi decorative touch */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 3 }}
+                className="relative z-10 flex gap-4 text-3xl"
+              >
+                <motion.span animate={{ y: [0, -10, 0] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0 }}>🪷</motion.span>
+                <motion.span animate={{ y: [0, -10, 0] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0.3 }}>🎇</motion.span>
+                <motion.span animate={{ y: [0, -10, 0] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0.6 }}>🪷</motion.span>
+                <motion.span animate={{ y: [0, -10, 0] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0.9 }}>🎇</motion.span>
+                <motion.span animate={{ y: [0, -10, 0] }} transition={{ duration: 1.5, repeat: Infinity, delay: 1.2 }}>🪷</motion.span>
+              </motion.div>
+
+              <FlowerBurst mode="mixed" burstCount={22}>
+                <motion.button
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 3.5, type: "spring" }}
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.94 }}
+                  onClick={handleCta}
+                  className="relative z-10 px-10 py-4 rounded-full bg-linear-to-r from-fuchsia-500 to-violet-600 text-white font-bold text-lg shadow-2xl shadow-fuchsia-500/30 [text-shadow:0_0_10px_rgba(255,255,255,0.3)]"
+                >
+                  {level.cta}
+                </motion.button>
+              </FlowerBurst>
+            </div>
+          )}
+
+          {/* ────────── LEVEL 6: Our Universe 🪐 ────────── */}
+          {currentLevel === 6 && (
+            <div className={`min-h-screen ${gradientBg} flex flex-col items-center justify-center px-6 pt-20 pb-16 text-center gap-8 relative overflow-hidden`}>
+              {/* GALAXY BACKGROUND */}
+              <GalaxyAnimation />
+
+              {/* Central content */}
+              <motion.div
+                initial={{ scale: 0, rotate: 180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ duration: 1.2, type: "spring", stiffness: 100 }}
+                className="text-8xl relative z-10"
+              >
+                {level.emoji}
+              </motion.div>
+
+              <div className="relative z-10 max-w-2xl">
+                {/* Glowing headline */}
+                <motion.h2
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                  className="text-4xl md:text-6xl font-bold text-white mb-6 [text-shadow:0_0_40px_rgba(129,140,248,0.5)]"
+                >
+                  {level.headline}
+                </motion.h2>
+
+                {/* Text with typewriter feel */}
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
+                  <TextGenerateEffect words={level.body} className="text-lg md:text-xl text-white/80 leading-relaxed font-normal" filter duration={0.5} />
+                </motion.div>
+
+                {/* Animated "you are here" marker */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 2.5 }}
+                  className="mt-8 flex flex-col items-center gap-2"
+                >
+                  <motion.div
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="relative"
+                  >
+                    <div className="w-4 h-4 rounded-full bg-pink-500 relative">
+                      <motion.div
+                        animate={{ scale: [1, 3, 1], opacity: [0.5, 0, 0.5] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="absolute inset-0 rounded-full bg-pink-500"
+                      />
+                    </div>
+                  </motion.div>
+                  <p className="text-pink-300/60 text-xs">← Kashish is here (center of my universe)</p>
+                </motion.div>
+              </div>
+
+              <FlowerBurst mode="hearts" burstCount={20}>
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 3, type: "spring" }}
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.94 }}
+                  onClick={handleCta}
+                  className="relative z-10 px-10 py-4 rounded-full bg-linear-to-r from-indigo-500 to-purple-600 text-white font-bold text-lg shadow-2xl shadow-indigo-500/30 [text-shadow:0_0_10px_rgba(255,255,255,0.3)]"
+                >
+                  {level.cta}
+                </motion.button>
+              </FlowerBurst>
+            </div>
+          )}
+
+          {/* ────────── LEVEL 7: FINAL ────────── */}
+          {currentLevel === 7 && (
             <div className={`min-h-screen ${gradientBg} flex flex-col items-center justify-center px-6 pt-20 pb-16 text-center gap-8 relative`}>
               <div className="absolute inset-0 pointer-events-none">
                 <SparklesCore particleDensity={120} particleColor="#ff6eb0" speed={1} background="transparent" />
@@ -511,9 +639,9 @@ export default function Home() {
                 {level.emoji}
               </motion.div>
               <div className="relative z-10 max-w-2xl">
-                {/* Gradient text headline — Aceternity style */}
-                <div className="relative mx-auto inline-block w-max [filter:drop-shadow(0px_1px_3px_rgba(236,72,153,0.4))] mb-6">
-                  <div className="absolute left-0 top-[1px] bg-clip-text bg-no-repeat text-transparent bg-linear-to-r py-2 from-pink-400 via-purple-400 to-rose-400 [text-shadow:0_0_rgba(0,0,0,0.1)]">
+                {/* Gradient text headline */}
+                <div className="relative mx-auto inline-block w-max filter-[drop-shadow(0px_1px_3px_rgba(236,72,153,0.4))] mb-6">
+                  <div className="absolute left-0 top-px bg-clip-text bg-no-repeat text-transparent bg-linear-to-r py-2 from-pink-400 via-purple-400 to-rose-400 [text-shadow:0_0_rgba(0,0,0,0.1)]">
                     <span className="text-3xl md:text-6xl font-bold">Kashish, I love you.</span>
                   </div>
                   <div className="relative bg-clip-text text-transparent bg-no-repeat bg-linear-to-r from-pink-400 via-purple-400 to-rose-400 py-2">
@@ -521,9 +649,10 @@ export default function Home() {
                   </div>
                 </div>
 
-                <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="text-xl text-white/70 leading-relaxed">
-                  {level.body}
-                </motion.p>
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="text-xl text-white/70 leading-relaxed">
+                  <p>From the bottom of my heart, I love you more than any words or website could ever show. But I made this just for you, because you deserve all the flowers in the world. 🌸</p>
+                  <p className="mt-4 text-pink-300 font-semibold text-2xl">You&apos;re the best, my baby girl 😘😘😘</p>
+                </motion.div>
 
                 {/* Photo placeholder */}
                 <motion.div
@@ -535,13 +664,7 @@ export default function Home() {
                 </motion.div>
 
                 {/* Big heart pulse */}
-                <motion.div
-                  animate={{ scale: [1, 1.15, 1] }}
-                  transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-                  className="text-6xl mt-6"
-                >
-                  💖
-                </motion.div>
+                <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }} className="text-6xl mt-6">💖</motion.div>
               </div>
 
               <motion.button
@@ -553,6 +676,7 @@ export default function Home() {
               </motion.button>
             </div>
           )}
+
         </motion.div>
       </AnimatePresence>
     </main>
