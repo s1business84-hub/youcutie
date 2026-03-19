@@ -253,12 +253,12 @@ export const GalaxyAnimation = () => (
 // ─── Scroll-triggered text reveal ─────────────────────────────────────────────
 
 const HINDI_LINES = [
-  { text: "Tu meri jaan hai 💗", delay: 0 },
-  { text: "Tere bina kuch bhi nahi 🥺", delay: 0.4 },
-  { text: "Aur haan…", delay: 0.8 },
-  { text: "Tera gussa bhi cute hai 😤🤣", delay: 1.2 },
-  { text: "Lekin tera smile?", delay: 1.6 },
-  { text: "Uske liye toh main kuch bhi kar sakta hoon 🌸", delay: 2.0 },
+  { text: "Acha jaan suno, ek baat bolun? 🤗", delay: 0 },
+  { text: "Tu meri jaan hai, mera dil hai tu 💗", delay: 0.5 },
+  { text: "Teri smile se roshan hai mera kal 🌟", delay: 1.0 },
+  { text: "Bina tere adhoora hai mera har pal 🥺", delay: 1.5 },
+  { text: "Gussa bhi karti hai toh cute lagti hai 😢🤣", delay: 2.0 },
+  { text: "No worries jaan, manana mujhe aata hai 😘", delay: 2.5 },
 ];
 
 export const HindiTextReveal = () => (
