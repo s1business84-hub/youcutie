@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { SparklesCore } from "@/components/ui/sparkles";
@@ -279,6 +279,30 @@ export default function Home() {
   const [secretMsg, setSecretMsg] = useState<string | null>(null);
   const [showSecret, setShowSecret] = useState(false);
   const [ctaClicked, setCtaClicked] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    const audio = new Audio("https://www.bensound.com/bensound-music/bensound-romantic.mp3");
+    audio.loop = true;
+    audio.volume = 0.35;
+    audio.muted = true;
+    audioRef.current = audio;
+    audio.play().catch(() => {});
+    return () => { audio.pause(); audio.src = ""; };
+  }, []);
+
+  const toggleMusic = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (muted) {
+      audio.muted = false;
+      audio.play().catch(() => {});
+    } else {
+      audio.muted = true;
+    }
+    setMuted((m) => !m);
+  }, [muted]);
 
   const level = LEVELS[currentLevel];
   const totalLevels = LEVELS.length - 1;
@@ -331,6 +355,17 @@ export default function Home() {
       <LevelBadge level={currentLevel + 1} name={level.name} />
       <LevelCompleteConfetti show={showConfetti} />
       <FloatingEmojis />
+
+      {/* Floating music toggle */}
+      <motion.button
+        onClick={toggleMusic}
+        whileTap={{ scale: 0.88 }}
+        whileHover={{ scale: 1.12 }}
+        title={muted ? "Play music" : "Mute music"}
+        className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-black/60 border border-pink-500/50 backdrop-blur-md flex items-center justify-center text-xl shadow-lg shadow-pink-900/40"
+      >
+        {muted ? "🔇" : "🎵"}
+      </motion.button>
 
       {/* Rose petal rain */}
       <div className="fixed inset-0 pointer-events-none z-30 overflow-hidden">
