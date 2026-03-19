@@ -554,7 +554,9 @@ export default function Home() {
               <div className="relative z-10 max-w-2xl">
                 <motion.h2 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="text-3xl md:text-5xl font-bold text-white mb-6">{level.headline}</motion.h2>
                 {THANK_YOU_ITEMS.map((item, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 + i * 0.18 }} className="text-white/80 text-base py-2 border-b border-white/10 last:border-0 text-left">{item}</motion.div>
+                  <motion.div key={i} initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 + i * 0.3 }} className="py-2 border-b border-white/10 last:border-0 text-left">
+                    <TextGenerateEffect words={item} className="text-white/80 text-base font-normal" filter duration={0.35} />
+                  </motion.div>
                 ))}
               </div>
               {/* Interactive Globe */}
@@ -622,7 +624,7 @@ export default function Home() {
                       >
                         {promise.emoji}
                       </motion.span>
-                      <p className="text-white/85 text-left text-base leading-snug">{promise.text}</p>
+                      <TextGenerateEffect words={promise.text} className="text-white/85 text-left text-base leading-snug font-normal" filter duration={0.35} />
                     </motion.div>
                   ))}
                 </div>
