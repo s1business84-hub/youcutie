@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { FlowerBurst, FloatingEmojis } from "@/components/ui/flower-burst";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
@@ -16,39 +15,39 @@ import { HeroHighlight, Highlight, World } from "@/components/ui/hero-highlight"
 const LEVELS = [
   {
     id: 0,
-    name: "The Beginning",
+    name: "A Letter For You",
     emoji: "💌",
     bg: "from-rose-950 via-black to-pink-950",
     sparkleColor: "#ff6eb0",
-    headline: "Hey Kashish…",
-    body: "I made you something. Something only you deserve. Are you ready to unlock it?",
-    cta: "Open my heart 💖",
+    headline: "Hey Kashish 🌸",
+    body: "I made you something. It took a while, a lot of love, and maybe a little courage too. It's just for you. Ready?",
+    cta: "Open it 💖",
     secretMessage: null as string | null,
     cards: false,
     final: false,
   },
   {
     id: 1,
-    name: "I'm Sorry",
+    name: "From My Heart",
     emoji: "🌹",
     bg: "from-red-950 via-black to-rose-950",
     sparkleColor: "#ff4466",
     headline: "I'm genuinely sorry.",
     body: "I know I haven't always been perfect. I've said things I shouldn't have, and not said things I should have. You deserved better from me in those moments. And I'm working on it every single day because YOU are worth it.",
-    cta: "I forgive you 🌹",
-    secretMessage: "The fact that you're still here means the world to me. 🥺",
+    cta: "I hear you 🌹",
+    secretMessage: "The fact that you're still here means everything to me. You have no idea. 🥺",
     cards: false,
     final: false,
   },
   {
     id: 2,
-    name: "Things I Love About You",
+    name: "Why I Love You",
     emoji: "🌸",
     bg: "from-purple-950 via-black to-pink-950",
     sparkleColor: "#c084fc",
     headline: "Let me count the ways 💕",
     body: "Tap every card to unlock what I love about you 🌸",
-    cta: "I unlocked them all! 💕",
+    cta: "All unlocked! 💕",
     secretMessage: null as string | null,
     cards: true,
     final: false,
@@ -60,7 +59,7 @@ const LEVELS = [
     bg: "from-indigo-950 via-black to-purple-950",
     sparkleColor: "#a78bfa",
     headline: "Thank you for everything.",
-    body: "For every late-night conversation. For every time you chose to stay. For your laugh, your warmth, your patience. For loving me even when I made it hard. I don't take a single moment with you for granted.",
+    body: "For every late night call. For every time you chose to stay. For your laugh, your warmth, your patience. For loving me even when I made it hard. I don't take a single moment with you for granted.",
     cta: "Keep going 🦋",
     secretMessage: null as string | null,
     cards: false,
@@ -68,32 +67,30 @@ const LEVELS = [
   },
   {
     id: 4,
-    name: "My Promise",
+    name: "My Promises",
     emoji: "💍",
-    bg: "from-amber-950 via-black to-rose-950",
-    sparkleColor: "#fbbf24",
-    headline: "Here's my promise to you.",
-    body: "I promise to choose you. Every single day. To make you feel seen, loved, and safe. To be the person who matches your energy and loves you the way you've always deserved. You're my person, Kashish.",
-    cta: "Collect your reward 🎁",
+    bg: "from-rose-950 via-black to-pink-950",
+    sparkleColor: "#fda4af",
+    headline: "I promise you this.",
+    body: "",
+    cta: "I believe you 🎁",
     secretMessage: null as string | null,
     cards: false,
     final: false,
   },
-  // ─── NEW LEVEL 5: Hindi / Fireworks ───
   {
     id: 5,
-    name: "Tu Meri Jaan Hai",
+    name: "Dil Se",
     emoji: "🎆",
     bg: "from-violet-950 via-black to-fuchsia-950",
     sparkleColor: "#e879f9",
-    headline: "Ab sunle Hindi mein… 🇮🇳",
+    headline: "Ab sunle Hindi mein 🇮🇳",
     body: "",
     cta: "Chal aage badh 🚀",
     secretMessage: "Tera gussa bhi handle kar lunga, bas tu rehna mere saath 🥺😂",
     cards: false,
     final: false,
   },
-  // ─── NEW LEVEL 6: Galaxy / Our Universe ───
   {
     id: 6,
     name: "Our Universe",
@@ -102,20 +99,19 @@ const LEVELS = [
     sparkleColor: "#818cf8",
     headline: "You're my entire universe.",
     body: "If the whole galaxy was mine, I'd still only look at you. Every star, every planet, every constellation reminds me that the universe made something perfect when it made you.",
-    cta: "Take me to the finale ✨",
+    cta: "Take me to the end ✨",
     secretMessage: null as string | null,
     cards: false,
     final: false,
   },
-  // ─── FINAL LEVEL (now 7) ───
   {
     id: 7,
-    name: "You're My Everything",
+    name: "Forever Yours",
     emoji: "🌌",
     bg: "from-black via-rose-950 to-black",
     sparkleColor: "#ff6eb0",
     headline: "You're my everything.",
-    body: "From the bottom of my heart, I love you more than any words or website could ever show. But I made this just for you, because you deserve all the flowers in the world. 🌸\n\nYou're the best, my baby girl 😘😘😘",
+    body: "",
     cta: null as string | null,
     secretMessage: null as string | null,
     cards: false,
@@ -128,42 +124,42 @@ const LEVELS = [
 const LOVE_CARDS = [
   {
     title: "Your laugh",
-    subtitle: "It's the most contagious thing I've ever heard. One giggle and my entire world gets lighter.",
+    subtitle: "It's the most contagious sound I've ever heard. One giggle from you and my entire world gets lighter instantly.",
     icon: <span className="text-4xl">😂</span>,
     colors: [[236, 72, 153], [232, 121, 249]] as number[][],
     containerClassName: "bg-black",
   },
   {
     title: "Your kindness",
-    subtitle: "You care about everyone around you so deeply. It makes me want to be a better person every day.",
+    subtitle: "The way you care for everyone around you so effortlessly. It makes me want to be a better person every single day.",
     icon: <span className="text-4xl">🤍</span>,
     colors: [[255, 255, 255], [200, 200, 255]] as number[][],
     containerClassName: "bg-slate-900",
   },
   {
     title: "Your strength",
-    subtitle: "You carry so much with so much grace. You're one of the strongest people I know and you don't even realise it.",
+    subtitle: "You carry so much with such quiet grace. You're one of the strongest people I know and you don't even realise it.",
     icon: <span className="text-4xl">💪</span>,
     colors: [[251, 191, 36], [249, 115, 22]] as number[][],
     containerClassName: "bg-amber-950",
   },
   {
     title: "Your mind",
-    subtitle: "The way you think, dream, and see the world is genuinely breathtaking. I could listen to you talk for hours.",
+    subtitle: "The way you think, dream and see the world is genuinely breathtaking. I could listen to you talk for hours and never get bored.",
     icon: <span className="text-4xl">🧠</span>,
     colors: [[125, 211, 252], [99, 102, 241]] as number[][],
     containerClassName: "bg-sky-900",
   },
   {
-    title: "The way you love",
-    subtitle: "You love with everything you have. Fully, honestly, and without conditions. That's rare. That's you.",
+    title: "How you love",
+    subtitle: "You love with everything you have. Fully, honestly, without conditions. That kind of love is rare. That's you.",
     icon: <span className="text-4xl">💗</span>,
     colors: [[244, 63, 94], [236, 72, 153]] as number[][],
     containerClassName: "bg-rose-950",
   },
   {
-    title: "You being you",
-    subtitle: "Every little weird, wonderful, beautiful thing that makes you Kashish. I wouldn't change a single thing.",
+    title: "Just being you",
+    subtitle: "Every little weird, wonderful, beautiful thing that makes you Kashish. I wouldn't trade a single second of knowing you.",
     icon: <span className="text-4xl">🌟</span>,
     colors: [[167, 139, 250], [236, 72, 153]] as number[][],
     containerClassName: "bg-purple-950",
@@ -248,12 +244,31 @@ const SecretPopup = ({ message, onClose }: { message: string; onClose: () => voi
 );
 
 const THANK_YOU_ITEMS = [
-  "For every time you believed in me 🙏",
-  "For every hug when I needed it most 🤗",
-  "For every laugh we shared 😂",
-  "For every fight we made it through 💪",
-  "For just being YOU, endlessly 💗",
+  "For every time you believed in me when I couldn't believe in myself 🙏",
+  "For every hug that made everything feel okay again 🤗",
+  "For every laugh we've shared at the most random moments 😂",
+  "For every fight we got through together and came out stronger 💪",
+  "For choosing to stay, again and again 💗",
+  "For just being you, endlessly 🌟",
 ];
+
+const PROMISES = [
+  { text: "I promise to choose you. Every single day.", emoji: "💫" },
+  { text: "I promise to make you feel seen and heard.", emoji: "👁️" },
+  { text: "I promise to be your safe place always.", emoji: "🏡" },
+  { text: "I promise to match your energy and your love.", emoji: "💞" },
+  { text: "I promise you won't regret trusting me.", emoji: "🤝" },
+  { text: "I promise to keep making you smile.", emoji: "😊" },
+];
+
+const ROSE_PETALS = Array.from({ length: 18 }, (_, i) => ({
+  id: i,
+  left: seededRand(i * 3) * 100,
+  delay: seededRand(i * 3 + 1) * 8,
+  duration: 6 + seededRand(i * 3 + 2) * 6,
+  size: 10 + seededRand(i * 3 + 3) * 14,
+  rotate: seededRand(i * 3 + 4) * 360,
+}));
 
 // ─── Main Game Page ───────────────────────────────────────────────────────────
 
@@ -317,6 +332,22 @@ export default function Home() {
       <LevelCompleteConfetti show={showConfetti} />
       <FloatingEmojis />
 
+      {/* Rose petal rain */}
+      <div className="fixed inset-0 pointer-events-none z-30 overflow-hidden">
+        {ROSE_PETALS.map((p) => (
+          <motion.div
+            key={p.id}
+            initial={{ y: "-10vh", x: `${p.left}vw`, opacity: 0, rotate: 0 }}
+            animate={{ y: "110vh", opacity: [0, 0.7, 0.7, 0], rotate: p.rotate }}
+            transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: "linear" }}
+            className="absolute text-rose-400"
+            style={{ fontSize: p.size }}
+          >
+            🌸
+          </motion.div>
+        ))}
+      </div>
+
       <AnimatePresence>
         {showSecret && secretMsg && (
           <SecretPopup message={secretMsg} onClose={() => setShowSecret(false)} />
@@ -358,6 +389,14 @@ export default function Home() {
                 </motion.h1>
                 <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="text-xl text-white/70 max-w-lg leading-relaxed">
                   {level.body}
+                </motion.p>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 0.5, 0] }}
+                  transition={{ delay: 1.8, duration: 3, repeat: Infinity }}
+                  className="text-pink-300/40 text-sm italic"
+                >
+                  made with love, just for you 🌹
                 </motion.p>
                 <FlowerBurst mode="mixed" burstCount={16}>
                   <motion.button
@@ -509,27 +548,64 @@ export default function Home() {
             </div>
           )}
 
-          {/* ────────── LEVEL 4: My Promise ────────── */}
+          {/* ────────── LEVEL 4: My Promises ────────── */}
           {currentLevel === 4 && (
-            <BackgroundBeamsWithCollision className={`min-h-screen ${gradientBg}`}>
-              <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-6 pt-20 pb-16 text-center gap-10">
-                <div className="absolute inset-0 pointer-events-none">
-                  <SparklesCore particleDensity={50} particleColor={level.sparkleColor} speed={0.6} background="transparent" />
-                </div>
-                <motion.div initial={{ scale: 0 }} animate={{ scale: [0, 1.2, 1] }} transition={{ duration: 0.8, delay: 0.3 }} className="text-7xl">{level.emoji}</motion.div>
-                <div className="relative z-10 max-w-2xl">
-                  <motion.h2 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="text-4xl md:text-6xl font-bold text-white mb-6">{level.headline}</motion.h2>
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }}>
-                    <TextGenerateEffect words={level.body} className="text-lg md:text-xl text-white/80 leading-relaxed font-normal" filter duration={0.4} />
-                  </motion.div>
-                </div>
-                <FlowerBurst mode="hearts" burstCount={24}>
-                  <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.4, type: "spring" }} whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }} onClick={handleCta} className="px-10 py-4 rounded-full bg-linear-to-r from-amber-500 to-rose-500 text-white font-bold text-lg shadow-2xl shadow-amber-500/30">
-                    {level.cta}
-                  </motion.button>
-                </FlowerBurst>
+            <div className={`min-h-screen ${gradientBg} flex flex-col items-center justify-center px-6 pt-20 pb-16 text-center gap-8 relative`}>
+              <div className="absolute inset-0 pointer-events-none">
+                <SparklesCore particleDensity={70} particleColor="#fda4af" speed={0.7} background="transparent" />
               </div>
-            </BackgroundBeamsWithCollision>
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: [0, 1.3, 1], rotate: [0, 20, 0] }}
+                transition={{ duration: 0.9, delay: 0.2, type: "spring" }}
+                className="text-7xl relative z-10"
+              >
+                {level.emoji}
+              </motion.div>
+              <div className="relative z-10 max-w-lg w-full">
+                <motion.h2
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="text-4xl md:text-5xl font-bold text-white mb-8 [text-shadow:0_0_30px_rgba(253,164,175,0.4)]"
+                >
+                  {level.headline}
+                </motion.h2>
+                <div className="flex flex-col gap-3">
+                  {PROMISES.map((promise, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -40, scale: 0.95 }}
+                      animate={{ opacity: 1, x: 0, scale: 1 }}
+                      transition={{ delay: 0.5 + i * 0.2, type: "spring", stiffness: 180 }}
+                      className="flex items-center gap-4 px-5 py-4 rounded-2xl bg-white/5 border border-rose-400/20 backdrop-blur-sm hover:border-rose-400/40 hover:bg-white/8 transition-all"
+                    >
+                      <motion.span
+                        animate={{ scale: [1, 1.3, 1] }}
+                        transition={{ duration: 2, delay: 0.8 + i * 0.2, repeat: Infinity, repeatDelay: 3 }}
+                        className="text-2xl shrink-0"
+                      >
+                        {promise.emoji}
+                      </motion.span>
+                      <p className="text-white/85 text-left text-base leading-snug">{promise.text}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+              <FlowerBurst mode="hearts" burstCount={26}>
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 2, type: "spring" }}
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.94 }}
+                  onClick={handleCta}
+                  className="relative z-10 px-10 py-4 rounded-full bg-linear-to-r from-rose-500 to-pink-500 text-white font-bold text-lg shadow-2xl shadow-rose-500/30"
+                >
+                  {level.cta}
+                </motion.button>
+              </FlowerBurst>
+            </div>
           )}
 
           {/* ────────── LEVEL 5: Hindi + Fireworks 🎆 ────────── */}
@@ -681,41 +757,72 @@ export default function Home() {
 
           {/* ────────── LEVEL 7: FINAL ────────── */}
           {currentLevel === 7 && (
-            <div className={`min-h-screen ${gradientBg} flex flex-col items-center justify-center px-6 pt-20 pb-16 text-center gap-8 relative`}>
+            <div className={`min-h-screen ${gradientBg} flex flex-col items-center justify-center px-6 pt-20 pb-16 text-center gap-6 relative`}>
               <div className="absolute inset-0 pointer-events-none">
                 <SparklesCore particleDensity={120} particleColor="#ff6eb0" speed={1} background="transparent" />
               </div>
-              <motion.div animate={{ rotate: [0, 10, -10, 10, -10, 0], scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }} className="text-8xl relative z-10">
+              <motion.div
+                animate={{ rotate: [0, 10, -10, 10, -10, 0], scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                className="text-8xl relative z-10"
+              >
                 {level.emoji}
               </motion.div>
               <div className="relative z-10 max-w-2xl">
-                {/* Gradient text headline */}
-                <div className="relative mx-auto inline-block w-max filter-[drop-shadow(0px_1px_3px_rgba(236,72,153,0.4))] mb-6">
-                  <div className="absolute left-0 top-px bg-clip-text bg-no-repeat text-transparent bg-linear-to-r py-2 from-pink-400 via-purple-400 to-rose-400 [text-shadow:0_0_rgba(0,0,0,0.1)]">
-                    <span className="text-3xl md:text-6xl font-bold">Kashish, I love you.</span>
+                {/* Gradient shimmer headline */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2, type: "spring" }}
+                  className="mb-4"
+                >
+                  <div className="relative mx-auto inline-block w-max filter-[drop-shadow(0px_1px_3px_rgba(236,72,153,0.4))]">
+                    <div className="absolute left-0 top-px bg-clip-text bg-no-repeat text-transparent bg-linear-to-r py-2 from-pink-400 via-purple-400 to-rose-400">
+                      <span className="text-3xl md:text-6xl font-bold">Kashish, I love you.</span>
+                    </div>
+                    <div className="relative bg-clip-text text-transparent bg-no-repeat bg-linear-to-r from-pink-400 via-purple-400 to-rose-400 py-2">
+                      <span className="text-3xl md:text-6xl font-bold">Kashish, I love you.</span>
+                    </div>
                   </div>
-                  <div className="relative bg-clip-text text-transparent bg-no-repeat bg-linear-to-r from-pink-400 via-purple-400 to-rose-400 py-2">
-                    <span className="text-3xl md:text-6xl font-bold">Kashish, I love you.</span>
-                  </div>
-                </div>
-
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="text-xl text-white/70 leading-relaxed">
-                  <p>From the bottom of my heart, I love you more than any words or website could ever show. But I made this just for you, because you deserve all the flowers in the world. 🌸</p>
-                  <p className="mt-4 text-pink-300 font-semibold text-2xl">You&apos;re the best, my baby girl 😘😘😘</p>
                 </motion.div>
+
+                {/* Animated quote lines */}
+                {[
+                  "You walked into my life and made it so much warmer.",
+                  "I don't want forever with anyone else. Only you.",
+                  "Thank you for being exactly who you are.",
+                ].map((line, i) => (
+                  <motion.p
+                    key={i}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 + i * 0.35 }}
+                    className="text-white/60 text-base italic mb-2"
+                  >
+                    &quot;{line}&quot;
+                  </motion.p>
+                ))}
+
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.6 }}
+                  className="mt-4 text-pink-300 font-semibold text-2xl"
+                >
+                  You&apos;re the best, my baby girl 😘😘😘
+                </motion.p>
 
                 {/* Our photo */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.85, y: 30 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
-                  className="mt-8 relative group"
+                  transition={{ delay: 1.9, duration: 0.8, ease: "easeOut" }}
+                  className="mt-6 relative group"
                 >
-                  {/* Glow ring */}
                   <motion.div
-                    animate={{ opacity: [0.4, 0.8, 0.4], scale: [1, 1.03, 1] }}
+                    animate={{ opacity: [0.4, 0.9, 0.4], scale: [1, 1.04, 1] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute -inset-1 rounded-3xl bg-linear-to-r from-pink-500 via-purple-500 to-rose-500 blur-lg"
+                    className="absolute -inset-1 rounded-3xl bg-linear-to-r from-pink-500 via-rose-400 to-purple-500 blur-lg"
                   />
                   <div className="relative rounded-3xl overflow-hidden border-2 border-pink-400/30 shadow-2xl shadow-pink-500/20">
                     <Image
@@ -726,21 +833,38 @@ export default function Home() {
                       className="object-cover w-full max-w-xs mx-auto"
                       priority
                     />
-                    {/* Overlay label */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent px-4 py-4">
-                      <p className="text-white/80 text-sm font-medium">Us 💖</p>
+                    <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/80 to-transparent px-4 py-5">
+                      <p className="text-white/90 text-sm font-medium">us 🥰💗</p>
                     </div>
                   </div>
                 </motion.div>
 
-                {/* Big heart pulse */}
-                <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }} className="text-6xl mt-6">💖</motion.div>
+                {/* Beating hearts row */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 2.8 }}
+                  className="mt-6 flex justify-center gap-3"
+                >
+                  {["💖", "💗", "💖", "💗", "💖"].map((h, i) => (
+                    <motion.span
+                      key={i}
+                      animate={{ scale: [1, 1.4, 1] }}
+                      transition={{ duration: 0.8, delay: i * 0.15, repeat: Infinity, repeatDelay: 1.5 }}
+                      className="text-2xl"
+                    >
+                      {h}
+                    </motion.span>
+                  ))}
+                </motion.div>
               </div>
 
               <motion.button
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 3.2 }}
                 onClick={() => { setCurrentLevel(0); setRevealedCards(new Set()); setCtaClicked(false); }}
-                className="relative z-10 text-sm text-white/30 hover:text-white/60 transition-colors underline underline-offset-4"
+                className="relative z-10 text-sm text-white/25 hover:text-white/50 transition-colors underline underline-offset-4"
               >
                 Play again from the beginning 🔄
               </motion.button>
