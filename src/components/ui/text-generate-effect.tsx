@@ -45,3 +45,16 @@ export const TextGenerateEffect = ({
     </div>
   );
 };
+
+const words = `Tu meri jaan hai, meri cutie patootie. Tere bina meri life bilkul looti looti. Teri smile dekh ke dil karta dhadaam. Aur tera gussa? Bas thoda sa kaam.`;
+
+export function TextGenerateEffectDemo() {
+  return (
+    <TextGenerateEffect
+      words={words}
+      className="text-center text-white text-lg md:text-2xl font-normal"
+      filter
+      duration={0.4}
+    />
+  );
+}
